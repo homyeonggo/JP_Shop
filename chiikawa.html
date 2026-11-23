@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#f6f4f0">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="favicon-32.png">
+<title>치이카와 크리스마스 마켓 계산기</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f6f4f0;color:#1d1b18;padding:env(safe-area-inset-top) 0 calc(170px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;background:#f6f4f0;padding:10px 12px 8px;z-index:5;border-bottom:1px solid #e6e1d8}
+.hr{display:flex;align-items:center;gap:8px}
+header a{font-size:13px;color:#1d1b18;text-decoration:none;border:1px solid #e6e1d8;background:#fff;border-radius:999px;padding:4px 10px}
+header b{font-size:16.5px}
+.rst{margin-left:auto;font-size:12.5px;border:1px solid #e9c3bb;color:#c8442f;background:#fff;border-radius:999px;padding:4px 10px;font-family:inherit}
+.tg{display:flex;gap:6px;margin-top:8px}
+.tg button{font:inherit;font-size:13px;border:1px solid #ddd6ca;background:#fff;border-radius:999px;padding:5px 12px}
+.tg button.on{background:#2f7a4a;border-color:#2f7a4a;color:#fff}
+.note{font-size:12px;color:#8a8378;padding:8px 16px 0;line-height:1.5}
+h2{font-size:15px;margin:16px 14px 4px}
+.it{display:flex;align-items:center;gap:10px;background:#fff;margin:8px 12px;border-radius:14px;padding:11px 12px;border:1px solid #ece7de}
+.it.on{border-color:#7cc394;background:#f6fcf8}
+.it.star{border:2px solid #f2b705;background:#fffbea}
+.sb{border:0;background:none;font-size:22px;padding:0 2px;line-height:1;color:#cfc9be;vertical-align:-2px;font-family:inherit}
+.it.star .sb{color:#f2b705}
+.rule{margin:8px 12px 0;background:#fff;border:1px solid #ece7de;border-radius:12px;padding:9px 12px;font-size:12.3px;line-height:1.55;color:#555}.rule b{color:#c8442f}
+.em{font-size:26px;width:36px;text-align:center;flex:none}
+.nm{flex:1;min-width:0}
+.k{font-weight:700;font-size:15px}
+.k small{font-weight:500;color:#8a8378;font-size:11.5px;margin-left:4px}
+.j{font-size:11px;color:#8a8378;margin-top:1px}
+.pr{display:flex;align-items:center;gap:3px;margin-top:5px;font-size:12.5px;color:#555;flex-wrap:wrap}
+.pr input{font:inherit;font-size:14px;padding:3px 6px;border:1px solid #ddd6ca;border-radius:8px;text-align:right;background:#fff}
+.pr .pi{width:70px}
+.pr .mi{width:40px;margin-left:8px}
+.pr .pi:placeholder-shown{border-color:#e9c3bb;background:#fff7f5}
+.sub{font-size:12.5px;color:#2f7a4a;font-weight:600;margin-top:3px}
+.sub:empty{display:none}
+.lim{color:#c8442f}
+.qt{display:flex;flex-direction:column;align-items:center;gap:4px;flex:none}
+.qt button{width:42px;height:34px;border-radius:10px;border:1px solid #ddd6ca;background:#fff;font-size:20px;line-height:1;color:#1d1b18;font-family:inherit}
+.qt .p{background:#2f7a4a;border-color:#2f7a4a;color:#fff}
+.qt .p:disabled{background:#cfc9be;border-color:#cfc9be}
+.qt span{font-size:17px;font-weight:700;min-width:28px;text-align:center}
+[hidden]{display:none!important}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#1d1b18;color:#fff;padding:11px 16px calc(12px + env(safe-area-inset-bottom));z-index:6}
+.bar .t{font-size:26px;font-weight:800}
+.bar .s{font-size:12.5px;color:#c9c3b8;margin-top:2px;line-height:1.45}
+.bar .w{color:#ffb4a6}.bar .g{color:#9be0b0}
+.bar .r{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:12.5px;color:#c9c3b8;flex-wrap:wrap}
+.bar .r input{width:62px;font:inherit;padding:2px 5px;border-radius:6px;border:0;text-align:right}
+</style></head><body>
+<header><div class="hr"><a href="index.html">← 목록</a><b>🎄 치이카와 마켓</b><button class="rst" type="button" onclick="reset()">처음 계획으로</button></div>
+<div class="tg"><button type="button" id="fa" class="on" onclick="mode(0)">전체 굿즈</button><button type="button" id="fs" onclick="mode(1)">담은 것만</button><button type="button" id="fx" onclick="mode(2)">⭐ 꼭 사기</button></div></header>
+<div class="note">＋/－로 개수 조절 → 아래 총액이 바로 바뀌어요. ☆를 누르면 <b>꼭 사기</b>로 강조돼요. 가격·최대 칸은 직접 고칠 수 있고 모두 자동 저장돼요.</div><div class="rule"><b>현장 구매 규칙(공식)</b><br>· 상품(종류)별 <b>1개까지</b> → 최대 = 종류 수로 미리 넣어둠<br>· 트레이딩 상품: 단품 8개까지 <b>또는</b> BOX 1개 (같이 못 삼)<br>· 굿즈 구역 입장·계산은 <b>1번뿐</b>, 추가 구매·재입장 불가<br>· <b>캐시리스 결제만</b> 가능 · 제한은 바뀔 수 있음</div>
+<div id="L"></div>
+<div class="bar"><div class="t" id="T">0엔</div><div class="s" id="S"></div>
+<div class="r">환율 100엔 = <input id="R" inputmode="decimal" placeholder="예: 930">원 → 약 <b id="K" style="color:#fff">-</b>원</div></div>
+<script>
+const G=[["🎄 장식·인테리어", [["sd", "❄️", "부쉬 드 노엘 스노우볼", "ブッシュドノエルなスノードーム", 4620, 1, "", 1], ["bl", "🛋️", "크리스마스 담요 (파우치 포함)", "クリスマスブランケット（ポーチ付き）", 3300, 1, "", 1], ["bal", "🎈", "큰 풍선", "おおきなバルーン", 2000, 0, "회장 한정", 1], ["card", "💌", "빙글빙글 우사기 크리스마스 카드 세트", "くるくる回るうさぎのクリスマスカードセット", 1650, 0, "", 1], ["bath", "🛁", "오너먼트 모양 배스솔트", "クリスマスオーナメント風バスソルト", 700, 0, "치이카와/하치와레/우사기", 3], ["pen", "⭐", "라이팅 펜던트 (별)", "ちいかわ ライティングペンダント（星）", 1870, 0, "회장 한정", 1]]], ["🧸 인형·마스코트", [["nui", "🧸", "크리스마스 마켓 인형", "クリスマスマーケットなぬいぐるみ", 3190, 3, "치이카와/하치와레/우사기", 3], ["tu", "🎄", "움직이는!? 트리 우사기 인형", "ちいかわ 動く！？ ツリーなうさぎぬいぐるみ", 2860, 0, "회장 한정", 1], ["wr", "💚", "크리스마스 리스 인형", "ちいかわ クリスマスリースなぬいぐるみ", 6820, 0, "회장 한정", 1], ["mas", "🎅", "산타 마스코트", "サンタさんなマスコット", 2000, 4, "전 8종", 8], ["kira", "🐻", "Kiramekko 테디베어 크리스마스", "ちいかわ Kiramekko Teddy Bear Christmas", 2420, 0, "3종 · 회장 한정", 3], ["mpo", "👛", "마스코트 파우치 (트리 모양)", "マスコットポーチ", 2200, 0, "", 1]]], ["🔑 키링·문구", [["kh", "🔑", "산타 모자 키링", "サンタさんの帽子キーホルダー", 1430, 3, "전 8종", 8], ["tch", "🎲", "트레이딩 아크릴 미니참 (단품)", "トレーディングアクリルミニチャーム", 330, 0, "랜덤 · BOX와 같이 못 삼", 8], ["tchb", "📦", "트레이딩 아크릴 미니참 BOX (8개)", "トレーディングアクリルミニチャーム BOX", 2640, 0, "단품과 같이 못 삼", 1], ["tms", "🎲", "트레이딩 미러 스티커 (단품)", "トレーディングミラーステッカー", 440, 0, "랜덤 · BOX와 같이 못 삼", 8], ["tmsb", "📦", "트레이딩 미러 스티커 BOX (8개)", "トレーディングミラーステッカー BOX", 3520, 0, "단품과 같이 못 삼", 1], ["acs", "🪧", "레이어 아크릴 스탠드", "レイヤーアクリルスタンド", 770, 0, "7종", 7], ["bst", "🏷️", "빅 다이컷 스티커", "ビッグダイカットステッカー", 440, 0, "전 8종", 8], ["sts", "📄", "크리스마스 스티커 시트", "クリスマスステッカーシート", 550, 0, "", 1], ["cf", "📁", "클리어파일", "クリアファイル", 440, 0, "2종", 2]]], ["🍽️ 식기·과자·뷰티", [["mug", "☕", "크리스마스 머그컵 (마시멜로 포함)", "クリスマスマグカップ（マシュマロ付き）", 2750, 1, "", 1], ["pl", "🍽️", "크리스마스 접시", "クリスマスプレート", 1760, 2, "2종", 2], ["mpl", "🥣", "미니접시 세트 (3개)", "ミニプレートセット（3個セット）", 1870, 1, "", 1], ["oka", "🍬", "과자 케이스 (사탕 포함)", "おかしケース（キャンディ付き）", 2200, 0, "치이카와/하치와레/우사기", 3], ["kin", "🎒", "사탕 든 복주머니 파우치", "キャンディ入り巾着ポーチ", 2420, 0, "치이카와/하치와레/우사기", 3], ["hc", "🧴", "미니 핸드크림 세트 (3개)", "ミニハンドクリームセット（3個入り）", 2090, 0, "", 1]]], ["🧣 의류·가방", [["tr", "👕", "크리스마스 맨투맨", "クリスマストレーナー", 4400, 0, "3캐릭터 × M/L/XL · 사이즈별 1개", 9], ["muf", "🧣", "복슬복슬 머플러", "もこもこマフラー", 3300, 0, "치이카와/하치와레/우사기", 3], ["sox", "🧦", "폭신폭신 양말", "ふわふわソックス", 1650, 0, "8종", 8], ["tote", "👜", "토트백", "トートバッグ", 2750, 0, "우사기/크리스마스 모두", 2], ["shb", "🛍️", "쇼핑백", "ショッピングバッグ", 990, 0, "", 1], ["ps", "🛍️", "종이 쇼퍼", "紙ショッパー", 250, 0, "", null], ["vl", "🛍️", "비닐 쇼퍼 (대)", "ビニールショッパー（大）", 55, 0, "", null], ["vs", "🛍️", "비닐 쇼퍼 (소)", "ビニールショッパー（小）", 55, 0, "", null]]], ["🛠️ 요로이상 마켓 · 커스텀 키참 파츠", [["cn", "🔗", "나스칸(고리) 파츠", "ナスカンパーツ", 60, 0, "8디자인", 8], ["cr", "🔘", "러버 파츠", "ラバーパーツ", 700, 0, "8디자인", 8], ["cm", "⚙️", "메탈 파츠", "メタルパーツ", 330, 0, "2디자인", 2], ["cac", "🙂", "아크릴 파츠 (캐릭터)", "アクリルパーツ（キャラクター）", 280, 0, "8디자인", 8], ["cas", "⭐", "아크릴 파츠 (소품)", "アクリルパーツ（小物）", 220, 0, "17디자인", 17], ["crb", "🎀", "리본 파츠", "リボンパーツ", 330, 0, "8디자인", 8]]]];
+const D=[];G.forEach(([g,its])=>its.forEach(x=>D.push(x)));
+const K="jp-shop-ck2";let S={};try{S=JSON.parse(localStorage.getItem(K))||{}}catch(e){}
+let M=0;
+const f=n=>n.toLocaleString("ko-KR");
+function g(id){const d=D.find(x=>x[0]==id),s=S[id]||{};return{p:s.p!==undefined?s.p:d[4],q:s.q!==undefined?s.q:d[5],m:s.m!==undefined?s.m:d[7],x:!!s.x}}
+function sv(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function st(id){return S[id]=S[id]||{}}
+function draw(){document.getElementById("L").innerHTML=G.map(([gn,its])=>`<h2 data-g>${gn}</h2>`+its.map(d=>{const v=g(d[0]);return`<div class="it" id="i_${d[0]}"><div class="em">${d[1]}</div><div class="nm"><div class="k"><button type="button" class="sb" onclick="star('${d[0]}')">★</button>${d[2]}${d[6]?`<small>${d[6]}</small>`:""}</div><div class="j">${d[3]}</div><div class="pr"><input class="pi" inputmode="numeric" placeholder="가격?" value="${v.p??""}" oninput="setp('${d[0]}',this.value)">엔<input class="mi" inputmode="numeric" placeholder="-" value="${v.m??""}" oninput="setm('${d[0]}',this.value)">최대</div><div class="sub" id="s_${d[0]}"></div></div><div class="qt"><button class="p" type="button" id="p_${d[0]}" onclick="add('${d[0]}',1)">＋</button><span id="q_${d[0]}">${v.q}</span><button type="button" onclick="add('${d[0]}',-1)">－</button></div></div>`}).join("")).join("");calc()}
+function num(v){v=v.replace(/[^0-9]/g,"");return v===""?null:+v}
+function setp(id,v){st(id).p=num(v);sv();calc()}
+function setm(id,v){const m=num(v);st(id).m=m;const q=g(id).q;if(m!=null&&q>m)st(id).q=m;sv();calc()}
+function blocked(id){return PAIR[id]&&g(PAIR[id]).q>0}
+function add(id,n){const v=g(id);let q=Math.max(0,v.q+n);if(v.m!=null&&q>v.m)q=v.m;if(n>0&&blocked(id))q=v.q;st(id).q=q;sv();calc()}
+function mode(m){M=m;["fa","fs","fx"].forEach((k,i)=>document.getElementById(k).classList.toggle("on",i==m));calc()}
+function star(id){st(id).x=!g(id).x;sv();calc()}
+const PAIR={tch:"tchb",tchb:"tch",tms:"tmsb",tmsb:"tms"};
+function calc(){let t=0,c=0,miss=[],xs=0,xm=[];
+for(const d of D){const v=g(d[0]),el=document.getElementById("s_"+d[0]),it=document.getElementById("i_"+d[0]);
+document.getElementById("q_"+d[0]).textContent=v.q;it.classList.toggle("on",v.q>0);it.classList.toggle("star",v.x);it.hidden=(M==1&&!v.q)||(M==2&&!v.x);if(v.x){xs++;if(!v.q)xm.push(d[2])}
+document.getElementById("p_"+d[0]).disabled=(v.m!=null&&v.q>=v.m)||blocked(d[0]);
+let s="";if(v.q>0){c+=v.q;if(v.p==null){miss.push(d[2])}else{t+=v.p*v.q;s=v.q>1?`${f(v.p)} × ${v.q} = ${f(v.p*v.q)}엔`:`${f(v.p)}엔`}}
+if(v.m!=null&&v.q>=v.m&&v.q>0)s+=` <span class="lim">· 최대 ${v.m}개</span>`;if(blocked(d[0]))s+=` <span class="lim">BOX/단품 중 하나만</span>`;el.innerHTML=s}
+document.querySelectorAll("h2[data-g]").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&n.tagName!="H2"){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any});
+document.getElementById("T").textContent=f(t)+"엔";
+const b=t>=6600?`<span class="g">🎁 특전: 자수 캔뱃지 + 巾着</span>`:t>=3300?`<span class="g">🎁 특전: 자수 캔뱃지</span> · 6,600엔까지 ${f(6600-t)}엔`:`3,300엔부터 특전`;
+document.getElementById("S").innerHTML=`총 ${c}개 · ${b}`+(xs?`<br>⭐ 꼭 사기 ${xs-xm.length}/${xs} 담음`+(xm.length?` · <span class="w">안 담음: ${xm.join(", ")}</span>`:""):"")+(miss.length?`<br><span class="w">가격 미입력: ${miss.join(", ")}</span>`:"");
+const r=parseFloat(document.getElementById("R").value);document.getElementById("K").textContent=r>0?f(Math.round(t*r/100)):"-"}
+function reset(){if(!confirm("처음 계획(37,920엔)으로 되돌릴까요? 가격·최대·별표도 초기화돼요."))return;S={rate:S.rate};sv();draw()}
+const R=document.getElementById("R");R.value=S.rate??"";R.oninput=()=>{S.rate=R.value;sv();calc()};
+draw();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+</script></body></html>
