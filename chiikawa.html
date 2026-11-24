@@ -73,10 +73,10 @@ const D=[];G.forEach(([g,its])=>its.forEach(x=>D.push(x)));
 const K="jp-shop-ck3";let S={};try{S=JSON.parse(localStorage.getItem(K))||{}}catch(e){}
 let M=0;
 const f=n=>n.toLocaleString("ko-KR");
-function g(id){const d=D.find(x=>x[0]==id),s=S[id]||{};return{p:s.p!==undefined?s.p:d[4],q:s.q!==undefined?s.q:d[5],m:s.m!==undefined?s.m:d[7],x:!!s.x}}
+function g(id){const d=D.find(x=>x[0]==id),s=S[id]||{};return{p:s.p!==undefined?s.p:d[4],q:s.q!==undefined?s.q:d[5],m:s.m!==undefined?s.m:d[7],x:s.x!==undefined?!!s.x:!!d[8]}}
 function sv(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function st(id){return S[id]=S[id]||{}}
-let CL=null;try{CL=JSON.parse(localStorage.getItem(K+"g"))}catch(e){}if(!Array.isArray(CL))CL=G.map((_,i)=>i).filter(i=>false);
+let CL=null;try{CL=JSON.parse(localStorage.getItem(K+"g"))}catch(e){}if(!Array.isArray(CL))CL=G.map((_,i)=>i).filter(i=>false&&!G[i][0].startsWith("⭐"));
 function svg(){try{localStorage.setItem(K+"g",JSON.stringify(CL))}catch(e){}}
 function tgl(i){const s=document.getElementById("g_"+i);s.classList.toggle("cl");CL=[...document.querySelectorAll(".grp.cl")].map(e=>+e.id.slice(2));svg()}
 function tga(){const all=[...document.querySelectorAll(".grp")];const close=all.some(s=>!s.classList.contains("cl"));all.forEach(s=>s.classList.toggle("cl",close));CL=close?all.map(e=>+e.id.slice(2)):[];svg();document.getElementById("tga").textContent=close?"펼치기":"접기"}
