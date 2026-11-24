@@ -95,7 +95,7 @@ document.getElementById("q_"+d[0]).textContent=v.q;it.classList.toggle("on",v.q>
 document.getElementById("p_"+d[0]).disabled=(v.m!=null&&v.q>=v.m)||blocked(d[0]);
 let s="";if(v.q>0){c+=v.q;if(v.p==null){miss.push(d[2])}else{t+=v.p*v.q;s=v.q>1?`${f(v.p)} × ${v.q} = ${f(v.p*v.q)}엔`:`${f(v.p)}엔`}}
 if(v.m!=null&&v.q>=v.m&&v.q>0)s+=` <span class="lim">· 최대 ${v.m}개</span>`;if(blocked(d[0]))s+=` <span class="lim">BOX/단품 중 하나만</span>`;el.innerHTML=s}
-document.querySelectorAll(".grp").forEach(s=>{const its=[...s.querySelectorAll(".it")];const vis=its.filter(e=>!e.hidden);s.hidden=!vis.length;const on=its.filter(e=>e.classList.contains("on")).length;s.querySelector("h2 small").textContent=vis.length+"개"+(on?` · 담음 ${on}`:"")});
+document.querySelectorAll(".grp").forEach(s=>{const its=[...s.querySelectorAll(".it")];const vis=its.filter(e=>!e.hidden);s.hidden=!vis.length;const on=its.filter(e=>e.classList.contains("on")).length;const vs=vis.reduce((n,e)=>n+((IM[e.id.slice(2)]||[1]).length),0);s.querySelector("h2 small").textContent=(vs>vis.length?`${vis.length}품목 · ${vs}종`:vis.length+"개")+(on?` · 담음 ${on}`:"")});
 document.getElementById("T").textContent=f(t)+"엔";
 const b=t>=5000?`<span class="g">면세 가능 (5,000엔↑ · 여권)</span>`:`면세까지 ${f(5000-t)}엔`;
 document.getElementById("S").innerHTML=`총 ${c}개 · ${b}`+(xs?`<br>⭐ 꼭 사기 ${xs-xm.length}/${xs} 담음`+(xm.length?` · <span class="w">안 담음: ${xm.join(", ")}</span>`:""):"")+(miss.length?`<br><span class="w">가격 미입력: ${miss.join(", ")}</span>`:"");
