@@ -111,5 +111,5 @@ const r=parseFloat(document.getElementById("R").value);document.getElementById("
 function reset(){if(!confirm("전부 0개로 비울까요? 가격·최대·별표도 초기화돼요."))return;S={rate:S.rate};sv();draw()}
 const R=document.getElementById("R");R.value=S.rate??"";R.oninput=()=>{S.rate=R.value;sv();calc()};
 draw();drawcf();if(CF)document.body.classList.add("flt");
-if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+if("serviceWorker"in navigator){let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!rl){rl=1;location.reload()}});navigator.serviceWorker.register("sw.js").then(g=>g.update()).catch(()=>{})}
 </script></body></html>
